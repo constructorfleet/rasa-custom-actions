@@ -1,4 +1,5 @@
 from typing import Dict, Text, Any, List
+import os
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
@@ -15,6 +16,9 @@ LOCATION_SLOT = 'location'
 
 class ActionLocatePerson(Action):
 
+    def __init__(self):
+        self.bearer_token = os.environ['HOME_ASSISTANT_TOKEN']
+
     def name(self) -> Text:
         return "action_locate_person"
 
@@ -26,7 +30,12 @@ class ActionLocatePerson(Action):
 
         _LOGGER.warning("Making request")
 
-        response = requests.get(f"https://automation.prettybaked.com/api/states/person.{person}")
+        response = requests.get(
+            f"https://automation.prettybaked.com/api/states/person.{person}",
+            headers={
+                "Authorization": f"Bearer {self.bearer_token}"
+            }
+        )
 
         try:
             response.raise_for_status()
