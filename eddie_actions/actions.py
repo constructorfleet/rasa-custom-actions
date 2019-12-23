@@ -51,6 +51,5 @@ class ActionLocatePerson(Action):
         else:
             return [
                 SlotSet(LOCATION_SLOT, location),
-                FollowupAction("utter_locate_success"),
-                SlotSet(LOCATION_SLOT, None)
+                FollowupAction("utter_locate_success")
             ]
