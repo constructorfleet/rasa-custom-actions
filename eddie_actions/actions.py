@@ -4,8 +4,10 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 
+import logging
 import requests
 
+_LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
 LOCATION_SLOT = 'location'
@@ -22,11 +24,14 @@ class ActionLocatePerson(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         person = tracker.get_slot(PERSON_SLOT)
 
+        _LOGGER.warning("Making request")
+
         response = requests.get(f"https://automation.prettybaked.com/api/states/person.{person}")
 
         try:
             response.raise_for_status()
         except requests.HTTPError as err:
+            _LOGGER.error(f"ERROR {err}")
             dispatcher.utter_message(text="Heart of Gold does not seem to be responding")
             return []
 
