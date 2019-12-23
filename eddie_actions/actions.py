@@ -50,6 +50,4 @@ class ActionLocatePerson(Action):
             dispatcher.utter_message(template="utter_locate_failed")
             return []
         else:
-            tracker.slots[LOCATION_SLOT] = location
-            dispatcher.utter_message(template="utter_locate_success")
-            return []
+            return [SlotSet(LOCATION_SLOT, location)]
