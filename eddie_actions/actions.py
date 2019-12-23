@@ -2,7 +2,7 @@ from typing import Dict, Text, Any, List
 import os
 
 from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, FollowupAction
 from rasa_sdk.executor import CollectingDispatcher
 
 import logging
@@ -47,7 +47,10 @@ class ActionLocatePerson(Action):
         location = response.json().get('state', None)
 
         if not location:
-            dispatcher.utter_message(template="utter_locate_failed")
-            return []
+            return [FollowupAction("utter_locate_failed")]
         else:
-            return [SlotSet(LOCATION_SLOT, location)]
+            return [
+                SlotSet(LOCATION_SLOT, location),
+                FollowupAction("utter_locate_success"),
+                SlotSet(LOCATION_SLOT, None)
+            ]
