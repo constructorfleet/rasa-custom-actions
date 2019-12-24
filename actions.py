@@ -85,8 +85,9 @@ class ActionWhoHome(Action):
                 str(x['entity_id']).startswith("person") and x['state'] == 'home']
         except requests.HTTPError as err:
             _LOGGER.error(str(err))
-
+        _LOGGER.warning("PEOPLE %s " % len(people_home))
         people_home = ', '.join([person for person in people_home])
+        _LOGGER.warning("PEOPLE %s" % people_home )
         if not people_home:
             dispatcher.utter_message(template="utter_noone_home")
         else:
