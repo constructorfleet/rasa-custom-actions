@@ -11,8 +11,7 @@ import os
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
-LOCATE_SUCCESS = 'locate_success'
-LOCATION_SLOT = 'location'
+LOCK_SLOT = 'lock'
 
 HOME_ASSISTANT_TOKEN = os.environ['HOME_ASSISTANT_TOKEN']
 
@@ -56,3 +55,39 @@ class ActionLocatePerson(Action):
 
         return []
 
+
+class ActionWhoHome(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_who_home"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        response = requests.post(
+            f"https://automation.prettybaked.com/api/states",
+            headers={
+                "Authorization": f"Bearer {self.bearer_token}"
+            }
+        )
+        people_home = None
+
+        try:
+            response.raise_for_status()
+            people_home = [x['attributes'].get('friendly_name', x['entity_id'].replace('person.", '')'))
+                           for x in response.json() if
+                           str(x['entity_id']).startswith("person") and x['state'] == 'home']
+        except requests.HTTPError as err:
+            _LOGGER.error(str(err))
+
+        if not people_home:
+            dispatcher.utter_message(template="utter_noone_home")
+        else
+            dispatcher.utter_message(template="utter_who_is_home", people=people_home)
+
+        return []
