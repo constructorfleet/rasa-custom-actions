@@ -8,6 +8,8 @@ from rasa_sdk.executor import CollectingDispatcher
 import logging
 import requests
 
+from eddie_actions import HOME_ASSISTANT_TOKEN
+
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
@@ -18,7 +20,7 @@ LOCATION_SLOT = 'location'
 class ActionLocatePerson(Action):
 
     def __init__(self):
-        self.bearer_token = os.environ['HOME_ASSISTANT_TOKEN']
+        self.bearer_token = HOME_ASSISTANT_TOKEN
 
     def name(self) -> Text:
         return "action_locate_person"
