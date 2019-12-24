@@ -1,20 +1,20 @@
 from typing import Dict, Text, Any, List
-import os
 
 from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet, FollowupAction
 from rasa_sdk.executor import CollectingDispatcher
 
 import logging
 import requests
 
-from eddie_actions import HOME_ASSISTANT_TOKEN
+import os
 
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
 LOCATE_SUCCESS = 'locate_success'
 LOCATION_SLOT = 'location'
+
+HOME_ASSISTANT_TOKEN = os.environ['HOME_ASSISTANT_TOKEN']
 
 
 class ActionLocatePerson(Action):
