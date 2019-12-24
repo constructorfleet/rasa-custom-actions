@@ -46,9 +46,9 @@ class ActionLocatePerson(Action):
         location = response.json().get('state', None)
 
         if not location:
-            dispatcher.utter_template(template="utter_locate_failed")
+            dispatcher.utter_message(template="utter_locate_failed")
         else:
-            dispatcher.utter_template(template="utter_locate_success", location=location)
+            dispatcher.utter_message(template="utter_locate_success", location=location)
 
         return []
 
