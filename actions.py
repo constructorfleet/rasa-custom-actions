@@ -87,7 +87,7 @@ class ActionWhoHome(Action):
 
         if not people_home:
             dispatcher.utter_message(template="utter_noone_home")
-        else
+        else:
             dispatcher.utter_message(template="utter_who_is_home", people=people_home)
 
         return []
