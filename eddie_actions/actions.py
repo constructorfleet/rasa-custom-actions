@@ -11,6 +11,7 @@ import requests
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
+LOCATE_SUCCESS = 'locate_success'
 LOCATION_SLOT = 'location'
 
 
@@ -28,10 +29,8 @@ class ActionLocatePerson(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         person = tracker.get_slot(PERSON_SLOT)
 
-        _LOGGER.warning("Making request")
-
         response = requests.get(
-            f"https://automation.prettybaked.com/api/states/person.{person}",
+            f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
             headers={
                 "Authorization": f"Bearer {self.bearer_token}"
             }
@@ -47,9 +46,9 @@ class ActionLocatePerson(Action):
         location = response.json().get('state', None)
 
         if not location:
-            return [FollowupAction("utter_locate_failed")]
+            dispatcher.utter_template(template="utter_locate_failed")
         else:
-            return [
-                SlotSet(LOCATION_SLOT, location),
-                FollowupAction("utter_locate_success")
-            ]
+            dispatcher.utter_template(template="utter_locate_success", location=location)
+
+        return []
+
