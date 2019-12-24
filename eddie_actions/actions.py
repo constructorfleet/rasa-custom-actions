@@ -27,7 +27,8 @@ class ActionLocatePerson(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        person = tracker.get_slot(PERSON_SLOT)
+        person = tracker.get_latest_entity_values(PERSON_SLOT)
+        # person = tracker.get_slot(PERSON_SLOT)
 
         response = requests.get(
             f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
@@ -46,6 +47,8 @@ class ActionLocatePerson(Action):
 
         if not location:
             dispatcher.utter_message(template="utter_locate_failed")
+        elif location == "not_home":
+            dispatcher.utter_message(template="utter_locate_success_away")
         else:
             dispatcher.utter_message(template="utter_locate_success", location=location)
 
