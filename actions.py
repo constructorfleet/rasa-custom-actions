@@ -86,6 +86,7 @@ class ActionWhoHome(Action):
         except requests.HTTPError as err:
             _LOGGER.error(str(err))
 
+        people_home = ', '.join([person for person in people_home])
         if not people_home:
             dispatcher.utter_message(template="utter_noone_home")
         else:
