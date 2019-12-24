@@ -27,7 +27,7 @@ class ActionLocatePerson(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        person = tracker.get_latest_entity_values(PERSON_SLOT)
+        person = next(tracker.get_latest_entity_values(PERSON_SLOT), None)
         # person = tracker.get_slot(PERSON_SLOT)
 
         response = requests.get(
