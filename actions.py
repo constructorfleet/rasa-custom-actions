@@ -69,7 +69,7 @@ class ActionWhoHome(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        response = requests.post(
+        response = requests.get(
             f"https://automation.prettybaked.com/api/states",
             headers={
                 "Authorization": f"Bearer {self.bearer_token}"
