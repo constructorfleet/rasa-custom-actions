@@ -36,14 +36,13 @@ class ActionLocatePerson(Action):
             }
         )
 
+        location = None
+
         try:
             response.raise_for_status()
+            location = response.json().get('state', None)
         except requests.HTTPError as err:
-            _LOGGER.error(f"ERROR {err}")
-            dispatcher.utter_message(text="Heart of Gold does not seem to be responding")
-            return []
-
-        location = response.json().get('state', None)
+            _LOGGER.error(str(err))
 
         if not location:
             dispatcher.utter_message(template="utter_locate_failed")
