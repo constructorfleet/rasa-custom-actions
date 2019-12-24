@@ -79,9 +79,10 @@ class ActionWhoHome(Action):
 
         try:
             response.raise_for_status()
-            people_home = [x['attributes'].get('friendly_name', x['entity_id'].replace('person.", '')'))
-                           for x in response.json() if
-                           str(x['entity_id']).startswith("person") and x['state'] == 'home']
+            people_home = [
+                x['attributes'].get('friendly_name', x['entity_id'].replace('person.', ''))
+                for x in response.json() if
+                str(x['entity_id']).startswith("person") and x['state'] == 'home']
         except requests.HTTPError as err:
             _LOGGER.error(str(err))
 
