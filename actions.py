@@ -102,7 +102,7 @@ class ActionWhoHome(Action):
         self.bearer_token = HOME_ASSISTANT_TOKEN
 
     def name(self) -> Text:
-        return "action_current_weather"
+        return "action_get_current_weather"
 
     def run(self,
             dispatcher: CollectingDispatcher,
