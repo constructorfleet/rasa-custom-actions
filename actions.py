@@ -122,7 +122,7 @@ class ActionWhoHome(Action):
             condition = response.json().get('state', None)
             temperature = response.json().get('attributes', {}).get('temperature', None)
             weather = "it's currently %s and %s" % (
-                condition, (temperature + " degrees") if temperature else "")
+                condition, ("%d degrees" % temperature) if temperature else "")
         except requests.HTTPError as err:
             _LOGGER.error(str(err))
         if not weather:
