@@ -129,7 +129,7 @@ def unlock(dispatcher: CollectingDispatcher,
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
         _LOGGER.error(str(err.request.body))
-        _LOGGER.error(str(err.response.body))
+        _LOGGER.error(str(err.response.content))
         dispatcher.utter_message(template="utter_lock_failed")
         return []
 
