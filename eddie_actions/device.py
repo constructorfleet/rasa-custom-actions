@@ -132,7 +132,7 @@ def unlock(dispatcher: CollectingDispatcher,
         return []
 
     if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_unlock")
+        dispatcher.utter_message(template="utter_unable_to_lock")
     else:
         dispatcher.utter_message(template="utter_unlocked")
 
