@@ -6,7 +6,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
 from actions import PERSON_SLOT
-from eddie_actions import HOME_ASSISTANT_TOKEN
+from . import HOME_ASSISTANT_TOKEN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ def locate_person(dispatcher: CollectingDispatcher,
     response = requests.get(
         f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
         headers={
-            "Authorization": f"Bearer {self.bearer_token}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
         }
     )
 
@@ -48,7 +48,7 @@ def who_is_home(dispatcher: CollectingDispatcher,
     response = requests.get(
         f"https://automation.prettybaked.com/api/states",
         headers={
-            "Authorization": f"Bearer {self.bearer_token}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
         }
     )
     people_home = None

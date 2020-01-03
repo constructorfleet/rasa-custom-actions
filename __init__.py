@@ -1,1 +1,1 @@
-
+PERSON_SLOT = "person"

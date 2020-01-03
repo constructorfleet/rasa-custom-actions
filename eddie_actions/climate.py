@@ -1,11 +1,12 @@
 from typing import Text, Dict, Any, List
 
 import requests
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
+from . import HOME_ASSISTANT_TOKEN
+
 from actions import _LOGGER
-from eddie_actions import HOME_ASSISTANT_TOKEN
 
 
 def get_current_weather(dispatcher: CollectingDispatcher,
@@ -14,7 +15,7 @@ def get_current_weather(dispatcher: CollectingDispatcher,
     response = requests.get(
         f"https://automation.prettybaked.com/api/states/weather.dark_sky_hourly",
         headers={
-            "Authorization": f"Bearer {self.bearer_token}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
         }
     )
     weather = None
