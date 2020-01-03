@@ -1,9 +1,9 @@
 import logging
 import math
 
-from eddie_actions import HOME_ASSISTANT_TOKEN
-from eddie_actions.location import who_is_home, locate_person
-from eddie_actions.climate import get_current_weather
+from actions.eddie_actions import HOME_ASSISTANT_TOKEN
+from actions.eddie_actions.location import who_is_home, locate_person
+from actions.eddie_actions.climate import get_current_weather
 import random
 from typing import Any, Text, Dict, List
 
