@@ -30,7 +30,7 @@ def get_current_weather(dispatcher: CollectingDispatcher,
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
     if not weather:
-        dispatcher.utter_message(template="utter_noone_home")
+        dispatcher.utter_message(template="utter_weather_failed")
     else:
         dispatcher.utter_message(text=weather)
 
