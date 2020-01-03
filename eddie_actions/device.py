@@ -125,7 +125,7 @@ def unlock(dispatcher: CollectingDispatcher,
             [state.state for state in response.json() if state.state != "unlocked"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_unlock_failed")
+        dispatcher.utter_message(template="utter_lock_failed")
         return []
 
     if not err_states:
