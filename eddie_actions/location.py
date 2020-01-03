@@ -11,81 +11,62 @@ from eddie_actions import HOME_ASSISTANT_TOKEN
 _LOGGER = logging.getLogger(__name__)
 
 
-class ActionLocatePerson(Action):
+def locate_person(dispatcher: CollectingDispatcher,
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    person = next(tracker.get_latest_entity_values(PERSON_SLOT), None)
+    # person = tracker.get_slot(PERSON_SLOT)
 
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
+    response = requests.get(
+        f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
+        headers={
+            "Authorization": f"Bearer {self.bearer_token}"
+        }
+    )
 
-    def name(self) -> Text:
-        return "action_locate_person"
+    location = None
 
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        person = next(tracker.get_latest_entity_values(PERSON_SLOT), None)
-        # person = tracker.get_slot(PERSON_SLOT)
+    try:
+        response.raise_for_status()
+        location = response.json().get('state', None)
+    except requests.HTTPError as err:
+        _LOGGER.error(str(err))
 
-        response = requests.get(
-            f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
-            headers={
-                "Authorization": f"Bearer {self.bearer_token}"
-            }
-        )
+    if not location:
+        dispatcher.utter_message(template="utter_locate_failed")
+    elif location == "not_home":
+        dispatcher.utter_message(template="utter_locate_success_away")
+    else:
+        dispatcher.utter_message(template="utter_locate_success", location=location)
 
-        location = None
-
-        try:
-            response.raise_for_status()
-            location = response.json().get('state', None)
-        except requests.HTTPError as err:
-            _LOGGER.error(str(err))
-
-        if not location:
-            dispatcher.utter_message(template="utter_locate_failed")
-        elif location == "not_home":
-            dispatcher.utter_message(template="utter_locate_success_away")
-        else:
-            dispatcher.utter_message(template="utter_locate_success", location=location)
-
-        return []
+    return []
 
 
-class ActionWhoHome(Action):
+def who_is_home(dispatcher: CollectingDispatcher,
+                tracker: Tracker,
+                domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    response = requests.get(
+        f"https://automation.prettybaked.com/api/states",
+        headers={
+            "Authorization": f"Bearer {self.bearer_token}"
+        }
+    )
+    people_home = None
 
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
+    try:
+        response.raise_for_status()
+        people_home = [
+            x['attributes'].get('friendly_name', x['entity_id'].replace('person.', ''))
+            for x in response.json() if
+            str(x['entity_id']).startswith("person") and x['state'] == 'home']
+    except requests.HTTPError as err:
+        _LOGGER.error(str(err))
+    _LOGGER.warning("PEOPLE %s " % len(people_home))
+    people_home = ', '.join([person for person in people_home])
+    _LOGGER.warning("PEOPLE %s" % people_home)
+    if not people_home:
+        dispatcher.utter_message(template="utter_noone_home")
+    else:
+        dispatcher.utter_message(template="utter_who_is_home", people=people_home)
 
-    def name(self) -> Text:
-        return "action_who_home"
-
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        response = requests.get(
-            f"https://automation.prettybaked.com/api/states",
-            headers={
-                "Authorization": f"Bearer {self.bearer_token}"
-            }
-        )
-        people_home = None
-
-        try:
-            response.raise_for_status()
-            people_home = [
-                x['attributes'].get('friendly_name', x['entity_id'].replace('person.', ''))
-                for x in response.json() if
-                str(x['entity_id']).startswith("person") and x['state'] == 'home']
-        except requests.HTTPError as err:
-            _LOGGER.error(str(err))
-        _LOGGER.warning("PEOPLE %s " % len(people_home))
-        people_home = ', '.join([person for person in people_home])
-        _LOGGER.warning("PEOPLE %s" % people_home )
-        if not people_home:
-            dispatcher.utter_message(template="utter_noone_home")
-        else:
-            dispatcher.utter_message(template="utter_who_is_home", people=people_home)
-
-        return []
+    return []

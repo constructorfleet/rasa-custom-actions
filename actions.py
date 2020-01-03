@@ -1,7 +1,9 @@
 import logging
+import math
 
-from eddie_actions.location import ActionWhoHome, ActionLocatePerson
-from eddie_actions.climate import ActionGetCurrentWeather
+from eddie_actions import HOME_ASSISTANT_TOKEN
+from eddie_actions.location import who_is_home, locate_person
+from eddie_actions.climate import get_current_weather
 import random
 from typing import Any, Text, Dict, List
 
@@ -34,8 +36,10 @@ def is_int(input):
         return False
     return True
 
+
 def round_up_10(x):
     return int(math.ceil(x / 10.0)) * 10
+
 
 class ActionNumberGuess(Action):
 
@@ -63,3 +67,54 @@ class ActionNumberGuess(Action):
             dispatcher.utter_message(text="Silly human, the number I selected was %d" % actual_number)
 
         return [SlotSet("number_guessed", True)]
+
+
+class ActionLocatePerson(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_locate_person"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return locate_person(dispatcher,
+                             tracker,
+                             domain)
+
+
+class ActionWhoHome(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_who_home"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return who_is_home(dispatcher,
+                           tracker,
+                           domain)
+
+
+class ActionGetCurrentWeather(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_get_current_weather"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return get_current_weather(dispatcher,
+                                   tracker,
+                                   domain)
