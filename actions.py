@@ -1,133 +1,65 @@
-from typing import Dict, Text, Any, List
+import logging
+
+from eddie_actions.location import ActionWhoHome, ActionLocatePerson
+from eddie_actions.climate import ActionGetCurrentWeather
+import random
+from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
+from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
-
-import logging
-import requests
-
-import os
 
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
 LOCK_SLOT = 'lock'
 
-HOME_ASSISTANT_TOKEN = os.environ['HOME_ASSISTANT_TOKEN']
+
+def is_float(input):
+    if not input:
+        return False
+    try:
+        num = float(input)
+    except ValueError:
+        return False
+    return True
 
 
-class ActionLocatePerson(Action):
+def is_int(input):
+    if not input:
+        return False
+    try:
+        num = int(input)
+    except ValueError:
+        return False
+    return True
 
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
+def round_up_10(x):
+    return int(math.ceil(x / 10.0)) * 10
 
-    def name(self) -> Text:
-        return "action_locate_person"
-
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        person = next(tracker.get_latest_entity_values(PERSON_SLOT), None)
-        # person = tracker.get_slot(PERSON_SLOT)
-
-        response = requests.get(
-            f"https://automation.prettybaked.com/api/states/person.{str(person).lower()}",
-            headers={
-                "Authorization": f"Bearer {self.bearer_token}"
-            }
-        )
-
-        location = None
-
-        try:
-            response.raise_for_status()
-            location = response.json().get('state', None)
-        except requests.HTTPError as err:
-            _LOGGER.error(str(err))
-
-        if not location:
-            dispatcher.utter_message(template="utter_locate_failed")
-        elif location == "not_home":
-            dispatcher.utter_message(template="utter_locate_success_away")
-        else:
-            dispatcher.utter_message(template="utter_locate_success", location=location)
-
-        return []
-
-
-class ActionWhoHome(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
+class ActionNumberGuess(Action):
 
     def name(self) -> Text:
-        return "action_who_home"
+        return "action_guess_number"
 
-    def run(self,
-            dispatcher: CollectingDispatcher,
+    def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        min_number = int(tracker.get_slot("number_guess_min"))
+        max_number = int(tracker.get_slot("number_guess_max"))
+        number = tracker.get_slot("number_guess")
 
-        response = requests.get(
-            f"https://automation.prettybaked.com/api/states",
-            headers={
-                "Authorization": f"Bearer {self.bearer_token}"
-            }
-        )
-        people_home = None
+        actual_number = random.randint(min_number, max_number)
 
-        try:
-            response.raise_for_status()
-            people_home = [
-                x['attributes'].get('friendly_name', x['entity_id'].replace('person.', ''))
-                for x in response.json() if
-                str(x['entity_id']).startswith("person") and x['state'] == 'home']
-        except requests.HTTPError as err:
-            _LOGGER.error(str(err))
-        _LOGGER.warning("PEOPLE %s " % len(people_home))
-        people_home = ', '.join([person for person in people_home])
-        _LOGGER.warning("PEOPLE %s" % people_home )
-        if not people_home:
-            dispatcher.utter_message(template="utter_noone_home")
+        if not is_int(number):
+            dispatcher.utter_message(text="That's not a number!")
+            return [SlotSet("number_guessed", False)]
+        if int(number) < min_number or int(number) > max_number:
+            dispatcher.utter_message(text="You might be hard of hearing, I said between %d and %d" % (min_number, max_number))
+            return [SlotSet("number_guessed", False)]
+        if actual_number == int(number):
+            dispatcher.utter_message(text="In all my circuits, I never would have predicted you would guess that correctly!")
         else:
-            dispatcher.utter_message(template="utter_who_is_home", people=people_home)
+            dispatcher.utter_message(text="Silly human, the number I selected was %d" % actual_number)
 
-        return []
-
-
-class ActionWhoHome(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
-    def name(self) -> Text:
-        return "action_get_current_weather"
-
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        response = requests.get(
-            f"https://automation.prettybaked.com/api/states/weather.dark_sky_hourly",
-            headers={
-                "Authorization": f"Bearer {self.bearer_token}"
-            }
-        )
-        weather = None
-
-        try:
-            response.raise_for_status()
-            condition = response.json().get('state', None)
-            temperature = response.json().get('attributes', {}).get('temperature', None)
-            weather = "it's currently %s and %s" % (
-                condition, ("%d degrees" % temperature) if temperature else "")
-        except requests.HTTPError as err:
-            _LOGGER.error(str(err))
-        if not weather:
-            dispatcher.utter_message(template="utter_noone_home")
-        else:
-            dispatcher.utter_message(text=weather)
-
-        return []
+        return [SlotSet("number_guessed", True)]
