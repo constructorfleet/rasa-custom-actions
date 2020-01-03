@@ -5,12 +5,12 @@ from actions.eddie_actions import HOME_ASSISTANT_TOKEN
 from actions.eddie_actions.location import who_is_home, locate_person
 from actions.eddie_actions.climate import get_current_weather
 from actions.games.guess_a_number import play_guess_a_number
+from actions.eddie_actions.device import open_garage, close_garage, lock, unlock
+
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-
-from eddie_actions.device import open_garage, close_garage, lock, unlock
 
 _LOGGER = logging.getLogger(__name__)
 
