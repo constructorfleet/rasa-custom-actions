@@ -50,7 +50,8 @@ def turn_off_device(dispatcher: CollectingDispatcher,
     response = requests.post(
         f"https://automation.prettybaked.com/api/services/homeassistant/turn_off",
         headers={
-            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
+            "Content-Type": "application/json"
         },
         data={
             "entity_id": ""
@@ -80,7 +81,8 @@ def lock(dispatcher: CollectingDispatcher,
     response = requests.post(
         f"https://automation.prettybaked.com/api/services/lock/lock",
         headers={
-            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
+            "Content-Type": "application/json"
         },
         data={
             "entity_id": "lock.front_door"
@@ -111,7 +113,8 @@ def unlock(dispatcher: CollectingDispatcher,
     response = requests.post(
         f"https://automation.prettybaked.com/api/services/lock/unlock",
         headers={
-            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
+            "Content-Type": "application/json"
         },
         data={
             "entity_id": "lock.front_door"
@@ -142,7 +145,8 @@ def open_garage(dispatcher: CollectingDispatcher,
     response = requests.post(
         f"https://automation.prettybaked.com/api/services/cover/open_cover",
         headers={
-            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
+            "Content-Type": "application/json"
         },
         data={
             "entity_id": "cover.garage_door_2"
@@ -172,7 +176,8 @@ def close_garage(dispatcher: CollectingDispatcher,
     response = requests.post(
         f"https://automation.prettybaked.com/api/services/cover/close_cover",
         headers={
-            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
+            "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
+            "Content-Type": "application/json"
         },
         data={
             "entity_id": "cover.garage_door_2"
