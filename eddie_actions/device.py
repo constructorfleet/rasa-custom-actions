@@ -116,7 +116,7 @@ def unlock(dispatcher: CollectingDispatcher,
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
             "Content-Type": "application/json"
         },
-        data={
+        json={
             "entity_id": "lock.front_door"
         }
     )
