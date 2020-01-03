@@ -10,9 +10,12 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
+from eddie_actions.device import open_garage, close_garage, lock, unlock
+
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
+DEVICE_SLOT = 'device'
 LOCK_SLOT = 'lock'
 
 
@@ -102,3 +105,71 @@ class ActionGetCurrentWeather(Action):
         return get_current_weather(dispatcher,
                                    tracker,
                                    domain)
+
+
+class ActionOpenGarage(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_open_garage"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return open_garage(dispatcher,
+                           tracker,
+                           domain)
+
+
+class ActionCloseGarage(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_close_garage"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return close_garage(dispatcher,
+                            tracker,
+                            domain)
+
+
+class ActionUnlock(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_unlock"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return unlock(dispatcher,
+                      tracker,
+                      domain)
+
+
+class ActionLock(Action):
+
+    def __init__(self):
+        self.bearer_token = HOME_ASSISTANT_TOKEN
+
+    def name(self) -> Text:
+        return "action_lock"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return lock(dispatcher,
+                    tracker,
+                    domain)
