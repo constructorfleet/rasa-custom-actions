@@ -1,12 +1,13 @@
 from typing import Text, Dict, Any, List
 
+import logging
 import requests
 from rasa_sdk import Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
 from . import HOME_ASSISTANT_TOKEN
 
-from actions import _LOGGER
+_LOGGER = logging.getLogger(__name__)
 
 
 def get_current_weather(dispatcher: CollectingDispatcher,
