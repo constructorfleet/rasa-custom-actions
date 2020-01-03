@@ -88,21 +88,15 @@ def lock(dispatcher: CollectingDispatcher,
             "entity_id": "lock.front_door"
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join(
-            [state.state for state in response.json() if state.state != "locked"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
         dispatcher.utter_message(template="utter_lock_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_lock")
-    else:
-        dispatcher.utter_message(template="utter_locked")
+    dispatcher.utter_message(template="utter_locked")
 
     return []
 
@@ -120,21 +114,15 @@ def unlock(dispatcher: CollectingDispatcher,
             "entity_id": "lock.front_door"
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join(
-            [state.state for state in response.json() if state.state != "unlocked"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
         dispatcher.utter_message(template="utter_lock_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_lock")
-    else:
-        dispatcher.utter_message(template="utter_unlocked")
+    dispatcher.utter_message(template="utter_unlocked")
 
     return []
 
