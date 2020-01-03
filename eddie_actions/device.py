@@ -6,10 +6,10 @@ import logging
 from rasa_sdk import Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from actions import DEVICE_SLOT
 from . import HOME_ASSISTANT_TOKEN
 
 _LOGGER = logging.getLogger(__name__)
+DEVICE_SLOT = 'device'
 
 
 def turn_on_device(dispatcher: CollectingDispatcher,

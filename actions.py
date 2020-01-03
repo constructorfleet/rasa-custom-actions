@@ -15,7 +15,6 @@ from rasa_sdk.executor import CollectingDispatcher
 _LOGGER = logging.getLogger(__name__)
 
 PERSON_SLOT = 'person'
-DEVICE_SLOT = 'device'
 LOCK_SLOT = 'lock'
 
 
