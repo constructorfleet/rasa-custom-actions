@@ -21,7 +21,7 @@ def turn_on_device(dispatcher: CollectingDispatcher,
         headers={
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}"
         },
-        data={
+        json={
             "entity_id": ""
         }
     )
@@ -53,7 +53,7 @@ def turn_off_device(dispatcher: CollectingDispatcher,
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
             "Content-Type": "application/json"
         },
-        data={
+        json={
             "entity_id": ""
         }
     )
@@ -84,7 +84,7 @@ def lock(dispatcher: CollectingDispatcher,
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
             "Content-Type": "application/json"
         },
-        data={
+        json={
             "entity_id": "lock.front_door"
         }
     )
@@ -128,8 +128,6 @@ def unlock(dispatcher: CollectingDispatcher,
             [state.state for state in response.json() if state.state != "unlocked"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        _LOGGER.error(str(err.request.body))
-        _LOGGER.error(str(err.response.content))
         dispatcher.utter_message(template="utter_lock_failed")
         return []
 
@@ -150,7 +148,7 @@ def open_garage(dispatcher: CollectingDispatcher,
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
             "Content-Type": "application/json"
         },
-        data={
+        json={
             "entity_id": "cover.garage_door_2"
         }
     )
@@ -181,7 +179,7 @@ def close_garage(dispatcher: CollectingDispatcher,
             "Authorization": f"Bearer {HOME_ASSISTANT_TOKEN}",
             "Content-Type": "application/json"
         },
-        data={
+        json={
             "entity_id": "cover.garage_door_2"
         }
     )
