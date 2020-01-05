@@ -7,13 +7,13 @@ from actions.games.guess_a_number import play_guess_a_number
 from actions.eddie_actions.device import open_garage, close_garage, lock, unlock
 
 from actions.media.tautalli import get_recent_media
+from actions.media.sabnzbd import get_download_queue_count
 
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from media.sabnzbd import get_download_queue_count
 
 _LOGGER = logging.getLogger(__name__)
 
