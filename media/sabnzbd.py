@@ -29,7 +29,7 @@ def get_download_queue_count(dispatcher: CollectingDispatcher,
             "Content-Type": "application/json"
         }
     )
-
+    _LOGGER.warning(SABNZBD_API_KEY)
     count = 0
 
     try:
