@@ -4,6 +4,7 @@ from typing import Text, Dict, Any, List
 import requests
 from rasa_sdk import Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
 
 from . import TAUTALLI_API_KEY, MEDIA_TYPE_SLOT
 
@@ -39,7 +40,7 @@ def get_recent_media(dispatcher: CollectingDispatcher,
 
             dispatcher.utter_message(text=message)
 
-    return []
+    return [SlotSet("media_type", "")]
 
 
 def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
