@@ -13,6 +13,13 @@ _LOGGER = logging.getLogger(__name__)
 
 ADDED_COUNT = 5
 
+SYNONYMS = {
+    'movie': 'movie',
+    'movies': 'movie',
+    'shows': 'show',
+    'episodes': 'show',
+    'tv shows': 'show'
+}
 VALID_MEDIA_TYPES = ["movie", "show"]
 
 
@@ -20,6 +27,7 @@ def get_recent_media(dispatcher: CollectingDispatcher,
                      tracker: Tracker,
                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
     media_type = next(tracker.get_latest_entity_values(MEDIA_TYPE_SLOT), None)
+    media_type = SYNONYMS.get(media_type, None)
     success, recent_media = query_recent_media(media_type)
     _LOGGER.warning(json.dumps(recent_media))
 
