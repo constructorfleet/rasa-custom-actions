@@ -21,11 +21,12 @@ def get_recent_media(dispatcher: CollectingDispatcher,
                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
     media_type = next(tracker.get_latest_entity_values(MEDIA_TYPE_SLOT), None)
     error, recent_media = query_recent_media(media_type)
+    _LOGGER.warning(json.dumps(recent_media))
 
     if error or not recent_media:
         dispatcher.utter_message(template="utter_media_failed")
     else:
-        _LOGGER.warning(json.dumps(recent_media))
+
         movies = ", ".join(recent_media['movies'])
         episodes = ", ".join(recent_media['episodes'])
         if not movies and not episodes:
@@ -78,6 +79,7 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
 
+    _LOGGER.warning(json.dumps(recent_media))
     if not recent_media:
         return False, {}
     else:
