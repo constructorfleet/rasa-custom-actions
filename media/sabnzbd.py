@@ -20,7 +20,7 @@ LIMIT = 1000
 def get_download_queue_count(dispatcher: CollectingDispatcher,
                              tracker: Tracker,
                              domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-    url = f"https://sabnzbd.home.prettybaked.com/api?output=json&apikey=APIKEY{SABNZBD_API_KEY}" \
+    url = f"https://sabnzbd.home.prettybaked.com/api?output=json&apikey={SABNZBD_API_KEY}" \
         f"&mode=queue&start={START}&limit={LIMIT}"
 
     response = requests.get(
@@ -29,12 +29,10 @@ def get_download_queue_count(dispatcher: CollectingDispatcher,
             "Content-Type": "application/json"
         }
     )
-    _LOGGER.warning(SABNZBD_API_KEY)
     count = 0
 
     try:
         response.raise_for_status()
-        _LOGGER.warning(json.dumps(response.json()))
         count = response.json().get('queue', {}).get('noofslots_total', 0)
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
