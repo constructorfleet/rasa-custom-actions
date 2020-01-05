@@ -1,5 +1,6 @@
 # http://host:port/sabnzbd/api?output=json&apikey=APIKEY
 # api?mode=queue&start=START&limit=LIMIT&search=SEARCH
+import json
 from typing import Dict, Text, Any, List
 
 import logging
@@ -33,6 +34,7 @@ def get_download_queue_count(dispatcher: CollectingDispatcher,
 
     try:
         response.raise_for_status()
+        _LOGGER.warning(json.dumps(response.json()))
         count = response.json().get('queue', {}).get('noofslots_total', 0)
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
