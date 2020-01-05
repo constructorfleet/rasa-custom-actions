@@ -25,20 +25,15 @@ def turn_on_device(dispatcher: CollectingDispatcher,
             "entity_id": ""
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join([state.state for state in response.json() if state.state != "on"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_turn_on_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_turn_on", devices=err_states)
-    else:
-        dispatcher.utter_message(template="utter_turned_on")
+    dispatcher.utter_message(template="utter_turned_on")
 
     return []
 
@@ -57,20 +52,15 @@ def turn_off_device(dispatcher: CollectingDispatcher,
             "entity_id": ""
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join([state.state for state in response.json() if state.state != "off"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_turn_off_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_turn_off", devices=err_states)
-    else:
-        dispatcher.utter_message(template="utter_turned_off")
+    dispatcher.utter_message(template="utter_turned_off")
 
     return []
 
@@ -93,7 +83,7 @@ def lock(dispatcher: CollectingDispatcher,
         response.raise_for_status()
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_lock_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
     dispatcher.utter_message(template="utter_locked")
@@ -119,7 +109,7 @@ def unlock(dispatcher: CollectingDispatcher,
         response.raise_for_status()
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_lock_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
     dispatcher.utter_message(template="utter_unlocked")
@@ -140,20 +130,15 @@ def open_garage(dispatcher: CollectingDispatcher,
             "entity_id": "cover.garage_door_2"
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join([state.state for state in response.json() if state.state != "open"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_open_garage_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_open_garage")
-    else:
-        dispatcher.utter_message(template="utter_open_garage")
+    dispatcher.utter_message(template="utter_open_garage")
 
     return []
 
@@ -171,20 +156,14 @@ def close_garage(dispatcher: CollectingDispatcher,
             "entity_id": "cover.garage_door_2"
         }
     )
-    err_states = None
 
     try:
         response.raise_for_status()
-        err_states = ", ".join(
-            [state.state for state in response.json() if state.state != "closed"])
     except requests.HTTPError as err:
         _LOGGER.error(str(err))
-        dispatcher.utter_message(template="utter_close_garage_failed")
+        dispatcher.utter_message(template="utter_device_failed")
         return []
 
-    if not err_states:
-        dispatcher.utter_message(template="utter_unable_to_close_garage")
-    else:
-        dispatcher.utter_message(template="utter_closed_garage")
+    dispatcher.utter_message(template="utter_closed_garage")
 
     return []
