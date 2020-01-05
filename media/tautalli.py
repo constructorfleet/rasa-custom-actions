@@ -26,8 +26,8 @@ def get_recent_media(dispatcher: CollectingDispatcher,
     if not success or not recent_media:
         dispatcher.utter_message(template="utter_media_failed")
     else:
-        movies = ", ".join(recent_media['movies'])
-        episodes = ", ".join(recent_media['episodes'])
+        movies = ", ".join(recent_media.get('movies', []))
+        episodes = ", ".join(recent_media.get('episodes', []))
         if not movies and not episodes:
             dispatcher.utter_message(
                 text="It appears we haven't added any recent media to our library")
