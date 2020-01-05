@@ -24,6 +24,8 @@ def get_recent_media(dispatcher: CollectingDispatcher,
     _LOGGER.warning(json.dumps(recent_media))
 
     if error or not recent_media:
+        _LOGGER.warning(f"ERROR {error}")
+        _LOGGER.warning(f"RECENT {recent_media}")
         dispatcher.utter_message(template="utter_media_failed")
     else:
 
