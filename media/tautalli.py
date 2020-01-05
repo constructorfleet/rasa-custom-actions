@@ -56,7 +56,7 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
         }
     )
 
-    recent_media = None
+    recent_media = {}
 
     try:
         response.raise_for_status()
@@ -64,10 +64,12 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
         recently_added = response.json().get('response', {}).get('data', {}).get('recently_added', [])
         movies = [media['title'] for media in recently_added if
                   media.get('media_type', '') == 'movie' and media.get('title', None)]
+        _LOGGER.warning(json.dumps(movies))
         episodes = [f"{media['grandparent_title']} episode {media['title']}"
                     for media in recently_added if
                     media.get('media_type', '') == 'episode'
                     and media.get('title', None) and media.get('grandparent_title', None)]
+        _LOGGER.warning(json.dumps(episodes))
         if movies:
             recent_media['movies'] = movies
         if episodes:
