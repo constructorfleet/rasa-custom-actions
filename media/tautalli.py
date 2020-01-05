@@ -34,12 +34,16 @@ def get_recent_media(dispatcher: CollectingDispatcher,
                 text="It appears we haven't added any recent media to our library")
         else:
             message = "We recently added"
+            _LOGGER.warning(message)
             if movies:
                 message += f" the movies {movies}"
+                _LOGGER.warning(message)
             if movies and episodes:
                 message += " and"
+                _LOGGER.warning(message)
             if episodes:
                 message += f" tv episodes {episodes}"
+                _LOGGER.warning(message)
 
             dispatcher.utter_message(text=message)
 
@@ -62,16 +66,13 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
 
     try:
         response.raise_for_status()
-        _LOGGER.warning(json.dumps(response.json()))
         recently_added = response.json().get('response', {}).get('data', {}).get('recently_added', [])
         movies = [media['title'] for media in recently_added if
                   media.get('media_type', '') == 'movie' and media.get('title', None)]
-        _LOGGER.warning(json.dumps(movies))
         episodes = [f"{media['grandparent_title']} episode {media['title']}"
                     for media in recently_added if
                     media.get('media_type', '') == 'episode'
                     and media.get('title', None) and media.get('grandparent_title', None)]
-        _LOGGER.warning(json.dumps(episodes))
         if movies:
             recent_media['movies'] = movies
         if episodes:
