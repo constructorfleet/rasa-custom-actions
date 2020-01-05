@@ -29,6 +29,8 @@ def get_recent_media(dispatcher: CollectingDispatcher,
 
         movies = ", ".join(recent_media['movies'])
         episodes = ", ".join(recent_media['episodes'])
+        _LOGGER.warning(movies)
+        _LOGGER.warning(episodes)
         if not movies and not episodes:
             dispatcher.utter_message(
                 text="It appears we haven't added any recent media to our library")
