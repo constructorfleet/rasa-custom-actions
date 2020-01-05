@@ -1,3 +1,3 @@
 import os
 
-HOME_ASSISTANT_TOKEN = os.environ['HOME_ASSISTANT_TOKEN']
+HOME_ASSISTANT_TOKEN = os.environ.get('HOME_ASSISTANT_TOKEN', '')
