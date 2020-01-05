@@ -25,6 +25,7 @@ def get_recent_media(dispatcher: CollectingDispatcher,
     if error or not recent_media:
         dispatcher.utter_message(template="utter_media_failed")
     else:
+        _LOGGER.warning(json.dumps(recent_media))
         movies = ", ".join(recent_media['movies'])
         episodes = ", ".join(recent_media['episodes'])
         if not movies and not episodes:
