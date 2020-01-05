@@ -43,6 +43,6 @@ def get_download_queue_count(dispatcher: CollectingDispatcher,
     elif count == 0:
         dispatcher.utter_message(text="We are not currently downloading any new media.")
     else:
-        dispatcher.utter_message(text=f"It seems we have {count} items in the download queue.")
+        dispatcher.utter_message(text=f"It seems we have {count} in the download queue.")
 
     return []
