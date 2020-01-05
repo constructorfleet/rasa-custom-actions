@@ -20,34 +20,25 @@ def get_recent_media(dispatcher: CollectingDispatcher,
                      tracker: Tracker,
                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
     media_type = next(tracker.get_latest_entity_values(MEDIA_TYPE_SLOT), None)
-    error, recent_media = query_recent_media(media_type)
+    success, recent_media = query_recent_media(media_type)
     _LOGGER.warning(json.dumps(recent_media))
 
-    if error or not recent_media:
-        _LOGGER.warning(f"ERROR {error}")
-        _LOGGER.warning(f"RECENT {recent_media}")
+    if success or not recent_media:
         dispatcher.utter_message(template="utter_media_failed")
     else:
-
         movies = ", ".join(recent_media['movies'])
         episodes = ", ".join(recent_media['episodes'])
-        _LOGGER.warning(movies)
-        _LOGGER.warning(episodes)
         if not movies and not episodes:
             dispatcher.utter_message(
                 text="It appears we haven't added any recent media to our library")
         else:
             message = "We recently added"
-            _LOGGER.warning(message)
             if movies:
                 message += f" the movies {movies}"
-                _LOGGER.warning(message)
             if movies and episodes:
                 message += " and"
-                _LOGGER.warning(message)
             if episodes:
                 message += f" tv episodes {episodes}"
-                _LOGGER.warning(message)
 
             dispatcher.utter_message(text=message)
 
