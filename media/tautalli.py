@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Text, Dict, Any, List
 
@@ -21,7 +22,7 @@ def get_recent_media(dispatcher: CollectingDispatcher,
     media_type = next(tracker.get_latest_entity_values(MEDIA_TYPE_SLOT), None)
     error, recent_media = query_recent_media(media_type)
 
-    if error:
+    if error or not recent_media:
         dispatcher.utter_message(template="utter_media_failed")
     else:
         movies = ", ".join(recent_media['movies'])
@@ -59,6 +60,7 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
 
     try:
         response.raise_for_status()
+        _LOGGER.warning(json.dumps(response.json()))
         recently_added = response.json().get('recently_added', [])
         movies = [media['title'] for media in recently_added if
                   media.get('media_type', '') == 'movie' and media.get('title', None)]
@@ -74,6 +76,6 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
         _LOGGER.error(str(err))
 
     if not recent_media:
-        return False, None
+        return False, {}
     else:
         return True, recent_media
