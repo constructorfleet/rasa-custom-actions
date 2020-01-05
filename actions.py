@@ -1,16 +1,19 @@
 import logging
 import math
 
-from actions.eddie_actions import HOME_ASSISTANT_TOKEN
 from actions.eddie_actions.location import who_is_home, locate_person
 from actions.eddie_actions.climate import get_current_weather
 from actions.games.guess_a_number import play_guess_a_number
 from actions.eddie_actions.device import open_garage, close_garage, lock, unlock
 
+from actions.media.tautalli import get_recent_media
+
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+
+from media.sabnzbd import get_download_queue_count
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,7 +46,6 @@ def round_up_10(x):
 
 
 class ActionNumberGuess(Action):
-
     def name(self) -> Text:
         return "action_guess_number"
 
@@ -56,10 +58,6 @@ class ActionNumberGuess(Action):
 
 
 class ActionLocatePerson(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_locate_person"
 
@@ -73,10 +71,6 @@ class ActionLocatePerson(Action):
 
 
 class ActionWhoHome(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_who_home"
 
@@ -90,10 +84,6 @@ class ActionWhoHome(Action):
 
 
 class ActionGetCurrentWeather(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_get_current_weather"
 
@@ -107,10 +97,6 @@ class ActionGetCurrentWeather(Action):
 
 
 class ActionOpenGarage(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_open_garage"
 
@@ -124,10 +110,6 @@ class ActionOpenGarage(Action):
 
 
 class ActionCloseGarage(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_close_garage"
 
@@ -141,10 +123,6 @@ class ActionCloseGarage(Action):
 
 
 class ActionUnlock(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_unlock"
 
@@ -158,10 +136,6 @@ class ActionUnlock(Action):
 
 
 class ActionLock(Action):
-
-    def __init__(self):
-        self.bearer_token = HOME_ASSISTANT_TOKEN
-
     def name(self) -> Text:
         return "action_lock"
 
@@ -172,3 +146,29 @@ class ActionLock(Action):
         return lock(dispatcher,
                     tracker,
                     domain)
+
+
+class ActionGetRecentMedia(Action):
+    def name(self) -> Text:
+        return "action_recent_media"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return get_recent_media(dispatcher,
+                                tracker,
+                                domain)
+
+
+class ActionGetDownloadCount(Action):
+    def name(self) -> Text:
+        return "action_download_count"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return get_download_queue_count(dispatcher,
+                                        tracker,
+                                        domain)
