@@ -46,6 +46,7 @@ def get_recent_media(dispatcher: CollectingDispatcher,
 
 
 def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
+    _LOGGER.warning(f"Media Type: {media_type}")
     url = f"https://tautulli.home.prettybaked.com//api/v2?apikey={TAUTALLI_API_KEY}" \
         f"&cmd=get_recently_added&count={ADDED_COUNT}"
     if media_type in VALID_MEDIA_TYPES:
@@ -62,12 +63,15 @@ def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
     try:
         response.raise_for_status()
         recently_added = response.json().get('response', {}).get('data', {}).get('recently_added', [])
+        _LOGGER.warning(json.dumps(recently_added))
         movies = [media['title'] for media in recently_added if
                   media.get('media_type', '') == 'movie' and media.get('title', None)]
+        _LOGGER.warning(f"Movies: {json.dumps(movies)}")
         episodes = [f"{media['grandparent_title']} episode {media['title']}"
                     for media in recently_added if
                     media.get('media_type', '') == 'episode'
                     and media.get('title', None) and media.get('grandparent_title', None)]
+        _LOGGER.warning(f"Episodes: {json.dumps(episodes)}")
         if movies:
             recent_media['movies'] = movies
         if episodes:
