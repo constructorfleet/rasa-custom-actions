@@ -11,7 +11,8 @@ from . import TAUTALLI_API_KEY, MEDIA_TYPE_SLOT
 
 _LOGGER = logging.getLogger(__name__)
 
-ADDED_COUNT = 5
+SPECIFIC_ADDED_COUNT = 5
+ALL_ADDED_COUNT = 10
 
 SYNONYMS = {
     'movie': 'movie',
@@ -56,8 +57,9 @@ def get_recent_media(dispatcher: CollectingDispatcher,
 
 def query_recent_media(media_type: str = None) -> (bool, Dict[Text, List[str]]):
     _LOGGER.warning(f"Media Type: {media_type}")
+    size = SPECIFIC_ADDED_COUNT if media_type in VALID_MEDIA_TYPES else ALL_ADDED_COUNT
     url = f"https://tautulli.home.prettybaked.com//api/v2?apikey={TAUTALLI_API_KEY}" \
-        f"&cmd=get_recently_added&count={ADDED_COUNT}"
+        f"&cmd=get_recently_added&count={size}"
     if media_type in VALID_MEDIA_TYPES:
         url += f"&media_type={media_type}"
     response = requests.get(
