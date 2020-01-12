@@ -28,9 +28,9 @@ def get_storage_health(dispatcher: CollectingDispatcher,
         url,
         headers={
             "Accept": "application/json",
-            "X-Dashboard-Id": 52,
-            "X-Panel-Id": 916,
-            "X-Grafana-Org-Id": 1
+            "X-Dashboard-Id": "52",
+            "X-Panel-Id": "916",
+            "X-Grafana-Org-Id": "1"
         }
     )
 
