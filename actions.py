@@ -9,11 +9,12 @@ from actions.eddie_actions.device import open_garage, close_garage, lock, unlock
 from actions.media.tautalli import get_recent_media
 from actions.media.sabnzbd import get_download_queue_count
 
+from actions.network.storage import get_storage_health
+
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -172,3 +173,16 @@ class ActionGetDownloadCount(Action):
         return get_download_queue_count(dispatcher,
                                         tracker,
                                         domain)
+
+
+class ActionGetStorageStatus(Action):
+    def name(self) -> Text:
+        return "action_storage_status"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return get_storage_health(dispatcher,
+                                  tracker,
+                                  domain)
