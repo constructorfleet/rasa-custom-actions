@@ -23,7 +23,7 @@ STORAGE_HEALTH_MAP = {
 def get_storage_health(dispatcher: CollectingDispatcher,
                        tracker: Tracker,
                        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-    url = 'https://stats.prettybaked.com/api/datasources/pro22%7D)'
+    url = 'https://stats.prettybaked.com/api/datasources/proxy/4/api/v1/query?query=count(ceph_health_status%7Binstance%3D~%22ceph03.home.prettybaked.com%3A9283%22%7D)'
     response = requests.get(
         url,
         headers={
