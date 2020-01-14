@@ -1,15 +1,15 @@
 import logging
 import math
 
-from eddie_actions.location import who_is_home, locate_person
-from eddie_actions.climate import get_current_weather
-from games.guess_a_number import play_guess_a_number
-from eddie_actions.device import open_garage, close_garage, lock, unlock
+from .eddie_actions.location import who_is_home, locate_person
+from .eddie_actions.climate import get_current_weather
+from .games.guess_a_number import play_guess_a_number
+from .eddie_actions.device import open_garage, close_garage, lock, unlock
 
-from media.tautalli import get_recent_media
-from media.sabnzbd import get_download_queue_count
+from .media.tautalli import get_recent_media
+from .media.sabnzbd import get_download_queue_count
 
-from network.storage import get_storage_health
+from .network.storage import get_storage_health
 
 from typing import Any, Text, Dict, List
 
