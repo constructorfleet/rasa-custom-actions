@@ -6,6 +6,8 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
+WORKDIR /app
+
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["start", "--actions", "actions.actions"]
