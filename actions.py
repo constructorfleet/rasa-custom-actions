@@ -1,20 +1,18 @@
 import logging
 import math
-
-from .eddie_actions.location import who_is_home, locate_person
-from .eddie_actions.climate import get_current_weather
-from .games.guess_a_number import play_guess_a_number
-from .eddie_actions.device import open_garage, close_garage, lock, unlock
-
-from .media.tautalli import get_recent_media
-from .media.sabnzbd import get_download_queue_count
-
-from .network.storage import get_storage_health
-
 from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+
+from third_party.paprika import get_a_recipe
+from .eddie_actions.climate import get_current_weather
+from .eddie_actions.device import open_garage, close_garage, lock, unlock
+from .eddie_actions.location import who_is_home, locate_person
+from .games.guess_a_number import play_guess_a_number
+from .media.sabnzbd import get_download_queue_count
+from .media.tautalli import get_recent_media
+from .network.storage import get_storage_health
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -186,3 +184,16 @@ class ActionGetStorageStatus(Action):
         return get_storage_health(dispatcher,
                                   tracker,
                                   domain)
+
+
+class ActionSuggestRecipe(Action):
+    def name(self) -> Text:
+        return "action_suggest_recipe"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        return get_a_recipe(dispatcher,
+                            tracker,
+                            domain)
