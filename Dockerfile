@@ -5,7 +5,7 @@ WORKDIR /app/actions
 
 RUN apt update \
     && apt get install git \
-    && git clone https://github.com/constructorfleet/pyprika.git
+    && git clone https://github.com/constructorfleet/pyprika.git \
     && cd pyprika \
     && pip install setuptools wheel \
     && python setup.py bdist_wheel \
