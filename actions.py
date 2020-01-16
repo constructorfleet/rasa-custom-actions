@@ -5,14 +5,14 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from .third_party.paprika import get_a_recipe
-from .eddie_actions.climate import get_current_weather
-from .eddie_actions.device import open_garage, close_garage, lock, unlock
-from .eddie_actions.location import who_is_home, locate_person
-from .games.guess_a_number import play_guess_a_number
-from .media.sabnzbd import get_download_queue_count
-from .media.tautalli import get_recent_media
-from .network.storage import get_storage_health
+from third_party.paprika import get_a_recipe
+from eddie_actions.climate import get_current_weather
+from eddie_actions.device import open_garage, close_garage, lock, unlock
+from eddie_actions.location import who_is_home, locate_person
+from games.guess_a_number import play_guess_a_number
+from media.sabnzbd import get_download_queue_count
+from media.tautalli import get_recent_media
+from network.storage import get_storage_health
 
 _LOGGER = logging.getLogger(__name__)
 
