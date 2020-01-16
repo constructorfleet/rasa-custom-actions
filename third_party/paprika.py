@@ -2,7 +2,7 @@ import asyncio
 from datetime import timedelta
 from typing import Dict, Text, Any, List
 
-from pyprika import Pyprika
+# from pyprika import Pyprika
 from rasa_sdk import Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
@@ -16,7 +16,7 @@ from . import (
     RECIPE_NAME_LIKE_SLOT
 )
 
-pyprika = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD, timedelta(hours=24), auto_fetch=True)
+# pyprika = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD, timedelta(hours=24), auto_fetch=True)
 
 
 def get_a_recipe(dispatcher: CollectingDispatcher,
@@ -27,11 +27,12 @@ def get_a_recipe(dispatcher: CollectingDispatcher,
     name = next(tracker.get_latest_entity_values(RECIPE_NAME_LIKE_SLOT), None)
 
     try:
-        recipes = asyncio.get_event_loop().run_until_complete(pyprika.get_recipes(
-            categories=categories,
-            duration=duration,
-            name_like=name
-        ))
+        recipes = []
+        # asyncio.get_event_loop().run_until_complete(pyprika.get_recipes(
+        #     categories=categories,
+        #     duration=duration,
+        #     name_like=name
+        # ))
 
         if not recipes or len(recipes) == 0:
             dispatcher.utter_message(template="utter_recipe_not_found")
