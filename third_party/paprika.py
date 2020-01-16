@@ -1,14 +1,20 @@
+import asyncio
 from datetime import timedelta
 from typing import Dict, Text, Any, List
 
-import asyncio
 from pyprika import Pyprika
 from rasa_sdk import Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 
-from third_party import PAPRIKA_USERNAME, PAPRIKA_PASSWORD, RECIPE_CATEGORIES_SLOT, \
-    RECIPE_DURATION_SLOT, RECIPE_NAME_SLOT, RECIPE_NAME_LIKE_SLOT
+from . import (
+    PAPRIKA_USERNAME,
+    PAPRIKA_PASSWORD,
+    RECIPE_CATEGORIES_SLOT,
+    RECIPE_DURATION_SLOT,
+    RECIPE_NAME_SLOT,
+    RECIPE_NAME_LIKE_SLOT
+)
 
 pyprika = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD, timedelta(hours=24), auto_fetch=True)
 
@@ -37,5 +43,3 @@ def get_a_recipe(dispatcher: CollectingDispatcher,
         dispatcher.utter_message(template="utter_recipe_failed")
 
     return []
-
-
