@@ -5,7 +5,7 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from third_party.paprika import get_a_recipe
+# from third_party.paprika import get_a_recipe
 from eddie_actions.climate import get_current_weather
 from eddie_actions.device import open_garage, close_garage, lock, unlock
 from eddie_actions.location import who_is_home, locate_person
@@ -186,14 +186,14 @@ class ActionGetStorageStatus(Action):
                                   domain)
 
 
-class ActionSuggestRecipe(Action):
-    def name(self) -> Text:
-        return "action_suggest_recipe"
-
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return get_a_recipe(dispatcher,
-                            tracker,
-                            domain)
+# class ActionSuggestRecipe(Action):
+#     def name(self) -> Text:
+#         return "action_suggest_recipe"
+#
+#     def run(self,
+#             dispatcher: CollectingDispatcher,
+#             tracker: Tracker,
+#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+#         return get_a_recipe(dispatcher,
+#                             tracker,
+#                             domain)
