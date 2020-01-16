@@ -3,8 +3,8 @@ FROM rasa/rasa-sdk:${RASA_SDK_VERSION}
 
 WORKDIR /app/actions
 
-RUN apt update \
-    && apt get install git \
+RUN apt-get update \
+    && apt-get install git \
     && git clone https://github.com/constructorfleet/pyprika.git \
     && cd pyprika \
     && pip install setuptools wheel \
