@@ -5,7 +5,9 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
+from pyprika import Pyprika
 
+from .third_party import PAPRIKA_USERNAME, PAPRIKA_PASSWORD
 from .third_party.paprika import get_a_recipe
 from .eddie_actions.climate import get_current_weather
 from .eddie_actions.device import open_garage, close_garage, lock, unlock
@@ -188,6 +190,10 @@ class ActionGetStorageStatus(Action):
 
 
 class ActionSuggestRecipe(Action):
+    def __init__(self):
+        super().__init__()
+        self.client = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD)
+
     def name(self) -> Text:
         return "action_suggest_recipe"
 
@@ -195,6 +201,7 @@ class ActionSuggestRecipe(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return get_a_recipe(dispatcher,
+        return get_a_recipe(self.client,
+                            dispatcher,
                             tracker,
                             domain)
