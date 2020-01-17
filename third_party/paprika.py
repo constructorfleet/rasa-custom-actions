@@ -38,8 +38,8 @@ def get_a_recipe(client: Pyprika,
             name_like=name
         )
 
-        recipe = recipes[randint(0, len(recipes) - 1)] \
-            if recipes and len(recipes) > 0 else None
+        index = randint(0, len(recipes) - 1)
+        recipe = recipes[index] if recipes and len(recipes) > 0 else None
         if not recipe:
             dispatcher.utter_message(template="utter_recipe_not_found")
         else:
@@ -51,7 +51,7 @@ def get_a_recipe(client: Pyprika,
             ]
     except Exception as err:
         _LOGGER.warning(str(err))
-        _LOGGER.error(traceback.print_exc(file=sys.stdout))
+        _LOGGER.error(str(err.__traceback__))
         dispatcher.utter_message(template="utter_recipe_failed")
 
     return []
