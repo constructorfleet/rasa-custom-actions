@@ -1,7 +1,8 @@
+import logging
 import sys
 import traceback
+from random import randint
 from typing import Dict, Text, Any, List
-import logging
 
 from pyprika import Pyprika
 from rasa_sdk import Tracker
@@ -35,7 +36,8 @@ def get_a_recipe(client: Pyprika,
             name_like=name
         )
 
-        recipe_name = recipes[0] if recipes and len(recipes) > 0 else None
+        recipe_name = recipes[randint(0, len(recipes) - 1)] \
+            if recipes and len(recipes) > 0 else None
         if not recipe_name:
             dispatcher.utter_message(template="utter_recipe_not_found")
         else:
