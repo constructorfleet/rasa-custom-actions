@@ -33,7 +33,7 @@ def get_a_recipe(client: Pyprika,
             name_like=name
         )
 
-        recipe_name = recipes[0].name if recipes and len(recipes) > 0 else None
+        recipe_name = recipes[0] if recipes and len(recipes) > 0 else None
         if not recipe_name:
             dispatcher.utter_message(template="utter_recipe_not_found")
         else:
