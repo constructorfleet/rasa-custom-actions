@@ -1,3 +1,5 @@
+import sys
+import traceback
 from typing import Dict, Text, Any, List
 import logging
 
@@ -41,6 +43,7 @@ def get_a_recipe(client: Pyprika,
         return [SlotSet(RECIPE_NAME_SLOT, recipe_name)]
     except Exception as err:
         _LOGGER.warning(str(err))
+        _LOGGER.error(traceback.print_exc(file=sys.stdout))
         dispatcher.utter_message(template="utter_recipe_failed")
 
     return []
