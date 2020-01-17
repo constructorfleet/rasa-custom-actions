@@ -51,7 +51,7 @@ def get_a_recipe(client: Pyprika,
             ]
     except Exception as err:
         _LOGGER.warning(str(err))
-        _LOGGER.error(str(err.__traceback__))
+        _LOGGER.exception(err)
         dispatcher.utter_message(template="utter_recipe_failed")
 
     return []
