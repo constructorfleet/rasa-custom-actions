@@ -189,19 +189,19 @@ class ActionGetStorageStatus(Action):
                                   domain)
 
 
-class ActionSuggestRecipe(Action):
-    def __init__(self):
-        super().__init__()
-        self.client = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD)
-
-    def name(self) -> Text:
-        return "action_suggest_recipe"
-
-    def run(self,
-            dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return get_a_recipe(self.client,
-                            dispatcher,
-                            tracker,
-                            domain)
+# class ActionSuggestRecipe(Action):
+#     def __init__(self):
+#         super().__init__()
+#         self.client = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD)
+#
+#     def name(self) -> Text:
+#         return "action_suggest_recipe"
+#
+#     def run(self,
+#             dispatcher: CollectingDispatcher,
+#             tracker: Tracker,
+#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+#         return get_a_recipe(self.client,
+#                             dispatcher,
+#                             tracker,
+#                             domain)
