@@ -14,7 +14,7 @@ RUN apt-get update \
     && cd pyprika \
     && pip install setuptools wheel \
     && python setup.py bdist_wheel \
-    && pip install dist/pyprika-0.1.0-py3-none-any.whl
+    && pip install dist/pyprika_client_client-0.1.0-py3-none-any.whl
 
 WORKDIR /app
 
