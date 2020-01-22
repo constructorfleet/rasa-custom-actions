@@ -5,10 +5,10 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from pyprika import Pyprika
+# from pyprika import Pyprika
 
-from .third_party import PAPRIKA_USERNAME, PAPRIKA_PASSWORD
-from .third_party.paprika import get_a_recipe
+# from .third_party import PAPRIKA_USERNAME, PAPRIKA_PASSWORD
+# from .third_party.paprika import get_a_recipe
 from .eddie_actions.climate import get_current_weather
 from .eddie_actions.device import open_garage, close_garage, lock, unlock
 from .eddie_actions.location import who_is_home, locate_person
