@@ -20,6 +20,6 @@ sanic==19.9.0
 Sanic-Cors==0.9.9.post1
 Sanic-Plugins-Framework==0.8.2
 ujson==1.35
-urllib3==1.25.7
+urllib3==1.25.8
 uvloop==0.14.0
 websockets==8.1
