@@ -1,207 +1,110 @@
-# import logging
-# import math
-# from typing import Any, Text, Dict, List
+# This files contains your custom actions which can be used to run
+# custom Python code.
 #
-# from rasa_sdk import Action, Tracker
-# from rasa_sdk.executor import CollectingDispatcher
-#
-# # from pyprika import Pyprika
-#
-# # from .third_party import PAPRIKA_USERNAME, PAPRIKA_PASSWORD
-# # from .third_party.paprika import get_a_recipe
-# # from .eddie_actions.climate import get_current_weather
-# # from .eddie_actions.device import open_garage, close_garage, lock, unlock
-# # from .eddie_actions.location import who_is_home, locate_person
-# # from .games.guess_a_number import play_guess_a_number
-# # from .media.sabnzbd import get_download_queue_count
-# # from .media.tautalli import get_recent_media
-# # from .network.storage import get_storage_health
-#
-# _LOGGER = logging.getLogger(__name__)
-#
-# PERSON_SLOT = 'person'
-# LOCK_SLOT = 'lock'
-#
-#
-# def is_float(input):
-#     if not input:
-#         return False
-#     try:
-#         num = float(input)
-#     except ValueError:
-#         return False
-#     return True
-#
-#
-# def is_int(input):
-#     if not input:
-#         return False
-#     try:
-#         num = int(input)
-#     except ValueError:
-#         return False
-#     return True
-#
-#
-# def round_up_10(x):
-#     return int(math.ceil(x / 10.0)) * 10
-#
-#
-# class ActionNumberGuess(Action):
-#     def name(self) -> Text:
-#         return "action_guess_number"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return play_guess_a_number(dispatcher,
-#                                    tracker,
-#                                    domain)
-#
-#
-# class ActionLocatePerson(Action):
-#     def name(self) -> Text:
-#         return "action_locate_person"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return locate_person(dispatcher,
-#                              tracker,
-#                              domain)
-#
-#
-# class ActionWhoHome(Action):
-#     def name(self) -> Text:
-#         return "action_who_home"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return who_is_home(dispatcher,
-#                            tracker,
-#                            domain)
-#
-#
-# class ActionGetCurrentWeather(Action):
-#     def name(self) -> Text:
-#         return "action_get_current_weather"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return get_current_weather(dispatcher,
-#                                    tracker,
-#                                    domain)
-#
-#
-# class ActionOpenGarage(Action):
-#     def name(self) -> Text:
-#         return "action_open_garage"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return open_garage(dispatcher,
-#                            tracker,
-#                            domain)
-#
-#
-# class ActionCloseGarage(Action):
-#     def name(self) -> Text:
-#         return "action_close_garage"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return close_garage(dispatcher,
-#                             tracker,
-#                             domain)
-#
-#
-# class ActionUnlock(Action):
-#     def name(self) -> Text:
-#         return "action_unlock"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return unlock(dispatcher,
-#                       tracker,
-#                       domain)
-#
-#
-# class ActionLock(Action):
-#     def name(self) -> Text:
-#         return "action_lock"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return lock(dispatcher,
-#                     tracker,
-#                     domain)
-#
-#
-# class ActionGetRecentMedia(Action):
-#     def name(self) -> Text:
-#         return "action_recent_media"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return get_recent_media(dispatcher,
-#                                 tracker,
-#                                 domain)
-#
-#
-# class ActionGetDownloadCount(Action):
-#     def name(self) -> Text:
-#         return "action_download_count"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return get_download_queue_count(dispatcher,
-#                                         tracker,
-#                                         domain)
-#
-#
-# class ActionGetStorageStatus(Action):
-#     def name(self) -> Text:
-#         return "action_storage_status"
-#
-#     def run(self,
-#             dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         return get_storage_health(dispatcher,
-#                                   tracker,
-#                                   domain)
-#
-#
-# # class ActionSuggestRecipe(Action):
-# #     def __init__(self):
-# #         super().__init__()
-# #         self.client = Pyprika(PAPRIKA_USERNAME, PAPRIKA_PASSWORD)
-# #
-# #     def name(self) -> Text:
-# #         return "action_suggest_recipe"
-# #
-# #     def run(self,
-# #             dispatcher: CollectingDispatcher,
-# #             tracker: Tracker,
-# #             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-# #         return get_a_recipe(self.client,
-# #                             dispatcher,
-# #                             tracker,
-# #                             domain)
+# See this guide on how to implement these action:
+# https://rasa.com/docs/rasa/custom-actions
+
+from typing import Any, Text, Dict, List
+
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
+
+import requests
+import json
+from urllib.request import Request, urlopen
+
+BASE_URL = 'https://api.trakt.tv'
+TRAKT_URL = 'https://trakt.tv'
+
+
+class ActionValidateMovieForm(Action):
+
+    def name(self) -> Text:
+        return "validate_movie_form"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        movie_name = tracker.get_slot('movie')
+        if (movie_name is not None):
+            movie_name = movie_name.replace(' ', '%20')
+
+            # Auth trakt
+            auth()
+
+            # Search movie
+            headers = {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': ""
+            }
+            request = Request(BASE_URL + '/search/movie?query=' + movie_name, headers=headers)
+            response_body = urlopen(request)
+            movies = json.load(response_body)
+            response_movies = [movie['movie']['title'] for movie in movies]
+            buttons = []
+            for movie in movies:
+                button = {
+                    "title": movie['movie']['title'] + ' ' + str(movie['movie']['year']),
+                    "payload": "/select_movie{\"selected_movie\": \"" + str(movie['movie']['ids']['trakt']) + "\"}"
+                }
+                buttons.append(button)
+
+            dispatcher.utter_message(text="Found the movies:", buttons=buttons)
+            return [SlotSet("movie", response_movies if response_movies is not None else [])]
+        else:
+            dispatcher.utter_message(text="Sorry, I couldn't find that movie.")
+            return []
+
+
+class ActionValidateDownloadMovieForm(Action):
+
+    def name(self) -> Text:
+        return "validate_download_movie_form"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        movie_id = tracker.get_slot('selected_movie')
+        if (movie_id is not None):
+            # Get movie by ID
+            headers = {
+                'Content-Type': 'application/json',
+                'trakt-api-version': '2',
+                'trakt-api-key': ""
+            }
+            movie_request = Request(BASE_URL + '/search/trakt/' + movie_id + '?type=movie', headers=headers)
+            movie_body = urlopen(movie_request)
+            movie_result = json.load(movie_body)
+            movie = [m['movie'] for m in movie_result]
+            print(movie_result)
+            movie_slug = movie_result[0]['movie']['ids']['slug']
+            print(movie_slug)
+
+            # Send movie to a telegram chat
+            telegram_bot_sendtext("Please download the movie: " + TRAKT_URL + '/movies/' + movie_slug)
+
+            dispatcher.utter_message(text="Starting to download your movie! Will be available in Diegoflix soon.")
+        else:
+            dispatcher.utter_message(text="Sorry, I couldn't find that movie.")
+        return []
+
+
+def auth():
+    # Auth trakt
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    request = Request(BASE_URL + '/oauth/authorize', headers=headers)
+    response_body = urlopen(request).read()
+
+
+def telegram_bot_sendtext(bot_message):
+    send_text = 'https://api.telegram.org/bot' + "" + '/sendMessage?chat_id=' + "" + '&parse_mode=Markdown&text=' + bot_message
+
+    response = requests.get(send_text)
+
+    return response.json()
