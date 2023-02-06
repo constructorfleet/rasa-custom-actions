@@ -3,8 +3,6 @@ FROM rasa/rasa-sdk:${RASA_SDK_VERSION}
 
 WORKDIR /app/actions
 
-RUN apt update && apt install -y vim
-
 COPY . .
 
 RUN pip install -r requirements.txt
