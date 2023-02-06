@@ -8,7 +8,7 @@ USER root
 
 # To install system dependencies
 RUN apt-get update -qq && \
-    apt-get install -y <NAME_OF_REQUIRED_PACKAGE> && \
+    apt-get install -y vim wget curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
