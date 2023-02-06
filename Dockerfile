@@ -3,7 +3,16 @@ FROM rasa/rasa-sdk:${RASA_SDK_VERSION}
 
 WORKDIR /app/actions
 
-COPY . .
+# Change back to root user to install dependencies
+USER root
+
+# To install system dependencies
+RUN apt-get update -qq && \
+    apt-get install -y <NAME_OF_REQUIRED_PACKAGE> && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
@@ -15,6 +24,11 @@ RUN pip install -r requirements.txt
 #    && pip install setuptools wheel \
 #    && python setup.py bdist_wheel \
 #    && pip install dist/pyprika_client_client-0.1.0-py3-none-any.whl
+
+# Switch back to non-root to run code
+USER 1001
+
+COPY . .
 
 WORKDIR /app
 
