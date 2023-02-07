@@ -6,7 +6,7 @@
 
 from typing import Any, Text, Dict, List
 
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
@@ -18,16 +18,19 @@ BASE_URL = 'https://api.trakt.tv'
 TRAKT_URL = 'https://trakt.tv'
 
 
-class ActionValidateMovieForm(Action):
+class ActionValidateMovieForm(FormValidationAction):
 
     def name(self) -> Text:
         return "validate_movie_form"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        movie_name = tracker.get_slot('movie')
+    def validate_movie(
+            self,
+            slot_value: Any,
+            dispatcher: "CollectingDispatcher",
+            tracker: "Tracker",
+            domain: "DomainDict",
+    ) -> Dict[Text, Any]:
+        movie_name = slot_value
         if (movie_name is not None):
             movie_name = movie_name.replace(' ', '%20')
 
@@ -43,20 +46,28 @@ class ActionValidateMovieForm(Action):
             request = Request(BASE_URL + '/search/movie?query=' + movie_name, headers=headers)
             response_body = urlopen(request)
             movies = json.load(response_body)
-            response_movies = [movie['movie']['title'] for movie in movies]
-            buttons = []
-            for movie in movies:
-                button = {
-                    "title": movie['movie']['title'] + ' ' + str(movie['movie']['year']),
-                    "payload": "/select_movie{\"selected_movie\": \"" + str(movie['movie']['ids']['trakt']) + "\"}"
+            # response_movies = [movie['movie']['title'] for movie in movies]
+            if not movies:
+                return {
+                    "movie_name": None
                 }
-                buttons.append(button)
-
-            dispatcher.utter_message(text="Found the movies:", buttons=buttons)
-            return [SlotSet("movie", response_movies if response_movies is not None else [])]
+            return {
+                "movie_name": movies[0]['movie']['title'] + ' ' + str(movies[0]['movie']['year'])
+            }
+            # buttons = []
+            # for movie in movies:
+            #     button = {
+            #         "title": movie['movie']['title'] + ' ' + str(movie['movie']['year']),
+            #         "payload": "/select_movie{\"selected_movie\": \"" + str(movie['movie']['ids']['trakt']) + "\"}"
+            #     }
+            #     buttons.append(button)
+            #
+            # dispatcher.utter_message(text="Found the movies:", buttons=buttons)
+            # return [SlotSet("movie", response_movies if response_movies is not None else [])]
         else:
-            dispatcher.utter_message(text="Sorry, I couldn't find that movie.")
-            return []
+            return {
+                "movie_name": None
+            }
 
 
 class ActionValidateDownloadMovieForm(Action):
@@ -64,11 +75,14 @@ class ActionValidateDownloadMovieForm(Action):
     def name(self) -> Text:
         return "validate_download_movie_form"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        movie_id = tracker.get_slot('selected_movie')
+    def validate_selected_movie(
+            self,
+            slot_value: Any,
+            dispatcher: "CollectingDispatcher",
+            tracker: "Tracker",
+            domain: "DomainDict",
+    ) -> Dict[Text, Any]:
+        movie_id = slot_value
         if (movie_id is not None):
             # Get movie by ID
             headers = {
@@ -86,11 +100,13 @@ class ActionValidateDownloadMovieForm(Action):
 
             # Send movie to a telegram chat
             telegram_bot_sendtext("Please download the movie: " + TRAKT_URL + '/movies/' + movie_slug)
-
-            dispatcher.utter_message(text="Starting to download your movie! Will be available in Diegoflix soon.")
+            return {
+                "selected_movie": movie
+            }
         else:
-            dispatcher.utter_message(text="Sorry, I couldn't find that movie.")
-        return []
+            return {
+                "selected_movie": None
+            }
 
 
 def auth():
